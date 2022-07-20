@@ -1,0 +1,3 @@
+Notes App!
+------------------
+1. My first entry, trying to learn node.

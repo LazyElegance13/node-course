@@ -1,0 +1,2 @@
+    // can add "debugger" above a line where we want to check the variables
+   // can access on chrome browser using the url chrome://inspect/#devices
