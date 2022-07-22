@@ -15,7 +15,12 @@ const getWeather = (latitude, longitude, callback) => {
             data = body.current;
             temperature = data.temperature;
             feelslike = data.feelslike;
-            callback(undefined, data.weather_descriptions[0] + '. It is currently ' + temperature + ' degrees out. It feels like ' + feelslike + ' degrees out.')
+            callback(undefined, {
+                forecast: data.weather_descriptions[0] + '. It is currently ' + temperature + ' degrees out. It feels like ' + feelslike + ' degrees out.',
+                icon: data.weather_icons[0],
+                humidity: `Humidity is ${data.humidity}`,
+                uv_index: `UV index is ${data.uv_index}`
+            })
         }
     })
 }

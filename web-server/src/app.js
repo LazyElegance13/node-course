@@ -61,7 +61,7 @@ app.get('/weather', (req, res) => {
             if (error) {
                 return res.send({error});
             }
-            res.send({forecast: forecastData, location, address});
+            res.send({forecast: forecastData.forecast, location, address, icon: forecastData.icon, humidity: forecastData.humidity, uv_index: forecastData.uv_index});
         });
     });
 
