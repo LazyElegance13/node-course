@@ -10,7 +10,9 @@
   "author": "lazylucifer",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.8.0",
     "mongoose": "^6.4.6",
     "validator": "^13.7.0"
