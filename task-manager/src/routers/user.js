@@ -3,12 +3,14 @@ const multer = require('multer')
 const sharp = require('sharp')
 const User = require("../models/user");
 const auth = require('../middleware/auth')
+const { sendWelcomeEmail, sendCancelationEmail } = require('../emails/account')
 const router = new express.Router();
 
 router.post("/users", async (req, res) => {
   const user = new User(req.body);
   try {
     await user.save();
+    sendWelcomeEmail(user.email, user.name)
     const token = await user.generateAuthToken()
     res.status(201).send({user, token});
   } catch (err) {
@@ -53,21 +55,6 @@ router.get("/users/me", auth, async (req, res) => {
   res.send(req.user)
 });
 
-// router.get("/users/:id", async (req, res) => {
-//   const _id = req.params.id;
-
-//   try {
-//     const user = await User.findById({ _id });
-//     if (!user) {
-//       return res.status(404).send();
-//     }
-
-//     res.send(user);
-//   } catch (err) {
-//     res.status(500).send();
-//   }
-// });
-
 router.patch("/users/me", auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ["name", "email", "password", "age"];
@@ -82,14 +69,6 @@ router.patch("/users/me", auth, async (req, res) => {
   try {
     updates.forEach((update) => req.user[update] = req.body[update])
     await req.user.save()
-    // const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-    //   new: true,
-    //   runValidators: true,
-    // });
-    // if (!req.user) {
-    //   return res.status(404).send();
-    // }
-
     res.send(req.user);
   } catch (error) {
     res.status(400).send(error);
@@ -99,10 +78,8 @@ router.patch("/users/me", auth, async (req, res) => {
 router.delete("/users/me", auth, async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.user._id);
-    // if (!user) {
-    //   return res.status(404).send();
-    // }
     await req.user.remove()
+    sendCancelationEmail(user.email, user.name)
     res.send(req.user);
   } catch (error) {
     res.status(500).send();

@@ -75,10 +75,6 @@ router.get("/tasks", auth, async (req, res) => {
     }
   
     try {
-      //   const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
-      //     new: true,
-      //     runValidators: true
-      //   })
       const task = await Task.findOne({_id: req.params.id, owner: req.user._id})
       if (!task) {
         return res.status(400).send()
